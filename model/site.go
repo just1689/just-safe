@@ -1,5 +1,11 @@
 package model
 
+import "fmt"
+
+func GetSiteFilename(site string) string {
+	return fmt.Sprintf("site-%s.json", site)
+}
+
 type Site struct {
 	Site    string  `json:"site"`
 	Entries []Entry `json:"entries"`

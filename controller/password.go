@@ -59,8 +59,8 @@ func AddPasswordV1(site, username, password string) (err error) {
 		return
 
 	}
-	out := fmt.Sprintf("%s.site.json", site)
-	model.StorageDriver.WriteFile(out, b)
+	filename := model.GetSiteFilename(site)
+	model.StorageDriver.WriteFile(filename, b)
 	return
 }
 
@@ -140,8 +140,8 @@ func GetPasswordV1(site, walletPassword, username string) (sitePassword string, 
 }
 
 func readSite(site string) (s *model.Site, err error) {
-	in := fmt.Sprintf("%s.site.json", site)
-	siteBytes, err := model.StorageDriver.ReadFile(in)
+	filename := model.GetSiteFilename(site)
+	siteBytes, err := model.StorageDriver.ReadFile(filename)
 	if err != nil {
 		return
 	}
