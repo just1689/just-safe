@@ -30,7 +30,19 @@ func main() {
 // See alternate IV creation from ciphertext below
 //var iv = []byte{35, 46, 57, 24, 85, 35, 24, 74, 87, 35, 88, 98, 66, 32, 14, 05}
 
-func Pad(in []byte) []byte {
+func Pad(in []byte, with string) []byte {
+	if with == "" {
+		return PadV1(in)
+	}
+	current := 0
+	for len(in) < 32 {
+		in = append(in, byte(with[current]))
+		current++
+	}
+	return in
+}
+
+func PadV1(in []byte) []byte {
 	for len(in) < 32 {
 		in = append(in, byte(' '))
 	}
