@@ -14,7 +14,7 @@ import (
 func AddPasswordV1(site, username, password string) (err error) {
 
 	//Load the wallet
-	b, err := model.StorageDriver.ReadFile(fmt.Sprintf("wallet.json"))
+	b, err := model.StorageDriver.ReadFile(fmt.Sprintf(model.WalletFilename))
 	if err != nil {
 		logrus.Errorln(err)
 		logrus.Errorln("could not read wallet")
@@ -65,7 +65,7 @@ func AddPasswordV1(site, username, password string) (err error) {
 }
 
 func GetPasswordV1(site, walletPassword, username string) (sitePassword string, err error) {
-	b, err := model.StorageDriver.ReadFile(fmt.Sprintf("wallet.json"))
+	b, err := model.StorageDriver.ReadFile(fmt.Sprintf(model.WalletFilename))
 	if err != nil {
 		logrus.Errorln(err)
 		logrus.Errorln("could not load wallet json")

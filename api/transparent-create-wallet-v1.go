@@ -29,7 +29,7 @@ func createWalletV1(writer http.ResponseWriter, request *http.Request) {
 		return
 	}
 
-	_, err = model.StorageDriver.ReadFile("wallet.json")
+	_, err = model.StorageDriver.ReadFile(model.WalletFilename)
 	if err == nil {
 		logrus.Errorln("wallet already exists")
 		writer.WriteHeader(http.StatusBadRequest)
