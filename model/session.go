@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/sirupsen/logrus"
+	"strings"
 	"time"
 )
 
@@ -15,6 +16,10 @@ type Session struct {
 func GetSessionFilename() string {
 	d, m, y := time.Now().Date()
 	return fmt.Sprintf("session.%v-%v-%v.json", y, int(m), d)
+}
+
+func IsSessionFilename(f string) bool {
+	return strings.HasPrefix(f, "session.")
 }
 
 func GetSessionFromBytes(b []byte) *Session {
