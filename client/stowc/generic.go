@@ -18,9 +18,9 @@ func (g *GenericDriver) Init(driver string) {
 	if driver == DRIVER_GOOGLE {
 		g.initGoogle()
 		return
-		//} else if driver == DRIVER_LOCAL {
-		//	g.initLocal()
-		//	return
+	} else if driver == DRIVER_LOCAL {
+		g.initLocal()
+		return
 	}
 }
 

@@ -14,13 +14,13 @@ func (g *GenericDriver) initGoogle() {
 	})
 	if err != nil {
 		logrus.Errorln(err)
-		logrus.Errorln("could not connect to cloud storage")
+		logrus.Errorln("could not dial to cloud storage")
 		panic(err)
 	}
 	stowBucket, err := stowLoc.Container(os.Getenv("BUCKET"))
 	if err != nil {
 		logrus.Errorln(err)
-		logrus.Errorln("could not connect to cloud storage")
+		logrus.Errorln("could not container to cloud storage")
 		panic(err)
 	}
 	g.client = &stowBucket
