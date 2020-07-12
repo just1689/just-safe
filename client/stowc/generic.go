@@ -2,7 +2,9 @@ package stowc
 
 import (
 	"bytes"
+	"fmt"
 	"github.com/graymeta/stow"
+	"github.com/pkg/errors"
 	"io/ioutil"
 	"log"
 )
@@ -25,11 +27,13 @@ func (g *GenericDriver) Init(driver string) {
 }
 
 func (g GenericDriver) ReadFile(path string) (b []byte, err error) {
+	found := false
 	err = stow.Walk(*g.client, stow.NoPrefix, 100, func(item stow.Item, err error) error {
 		if err != nil {
 			return err
 		}
 		if item.Name() == path {
+			found = true
 			r, err := item.Open()
 			if err != nil {
 				return err
@@ -39,6 +43,9 @@ func (g GenericDriver) ReadFile(path string) (b []byte, err error) {
 		}
 		return nil
 	})
+	if !found {
+		err = errors.New(fmt.Sprint("could not find file named", path))
+	}
 	return
 }
 
