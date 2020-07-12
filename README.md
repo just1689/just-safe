@@ -16,8 +16,4 @@ A secure stateless service containerized with a cloud storage client.
 
 ## Phase 2
 
-Web application
-
-## Phase 3
-
-Chrome, Firefox extensions
+Desktop app

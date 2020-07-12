@@ -1,6 +1,8 @@
 # Just Safe
 
 ## Road map
+
+### Phase 1
 - [x] Create wallet core
 - [x] Create private and  public keys util
 - [x] Encrypt symmetrically
@@ -17,21 +19,29 @@
 - [x] Storage - Create local storage driver
 - [x] Storage - Swap to Stow
 - [ ] Storage - docs showing how to collect
-- [ ] API - create wallet
-- [ ] API - Add a password
-- [ ] API - Get a password
+- [x] API - create wallet
+- [x] API - Add a password
+- [x] API - Get a password
+- [x] Multi-username per site support
+- [ ] Protect all controllers with *wallet password*
+- [ ] Randomize padding string and store padding string
+- [ ] Look into the security model and call for evaluation
+
+
+### Phase 2
 - [ ] API - Encrypted endpoints /encrypted/api/...
 - [ ] API - Encrypted - Generate private and public key for the server instance.
 - [ ] API - Encrypted - Store private and public key
 - [ ] API - Encrypted - Decrypt incoming http request body with private key
 - [ ] API - Encrypted - Decrypt incoming http request body with private key
-- [ ] Multi-username per site support
-- [ ] Protect *Add* controller with *wallet password*
-- [ ] Randomize padding string and store padding string
-- [ ] Investigate transit-encryption wrapper - do not need to trust HTTP over TLS
-- [ ] Look into the security model and call for evaluation
-- [ ] Plugin - GUI
-- [ ] Plugin - Set endpoint
-- [ ] Plugin - Encrypted - Encrypt body request with public key for /encrypted/api endpoints
+- [ ] Client side - Desktop app
+- [ ] Client side - Call API
+- [ ] Client side - Add password 
+- [ ] Client side - Get password
 
+### Phase 3
+- [ ] Docs for `stow`
+- [ ] Docs setup on GCP
+- [ ] Docs setup locally
 
+ 
