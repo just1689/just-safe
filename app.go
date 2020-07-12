@@ -3,6 +3,7 @@ package main
 import (
 	"flag"
 	"fmt"
+	"github.com/just1689/just-safe/client/stowc"
 	"github.com/just1689/just-safe/controller"
 	"github.com/just1689/just-safe/model"
 	"github.com/sirupsen/logrus"
@@ -15,13 +16,15 @@ var username = flag.String("username", "", "username")
 var password = flag.String("password", "", "password")
 var get = flag.String("get", "", "get password")
 
-var driver = flag.String("driver", "local", "Storage driver to use")
+var driver = flag.String("driver", "google", "Storage driver to use")
 
 func main() {
 	flag.Parse()
 
 	if *driver == "local" {
 		model.StorageDriver = model.LocalDriver{}
+	} else if *driver == "google" {
+		model.StorageDriver = stowc.GoogleDriver{}
 	}
 
 	if model.StorageDriver == nil {
