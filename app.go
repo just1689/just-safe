@@ -5,9 +5,10 @@ import (
 	"encoding/json"
 	"flag"
 	"fmt"
-	"github.com/just1689/just-safe/disk"
-	"github.com/just1689/just-safe/encryption/asymmetric"
-	"github.com/just1689/just-safe/encryption/symmetric"
+	"github.com/just1689/just-safe/model"
+	"github.com/just1689/just-safe/util/disk"
+	"github.com/just1689/just-safe/util/encryption/asymmetric"
+	"github.com/just1689/just-safe/util/encryption/symmetric"
 	"github.com/sirupsen/logrus"
 	"io/ioutil"
 )
@@ -50,7 +51,7 @@ func getSite() {
 		panic("could not load wallet json")
 		return
 	}
-	w := &Wallet{}
+	w := &model.Wallet{}
 	err = json.Unmarshal(b, w)
 	if err != nil {
 		logrus.Errorln(err)
@@ -124,7 +125,7 @@ func addSite() {
 		panic(fmt.Sprintln("could not read wallet", *wallet))
 		return
 	}
-	w := &Wallet{}
+	w := &model.Wallet{}
 	err = json.Unmarshal(b, w)
 	if err != nil {
 		logrus.Errorln(err)
@@ -190,7 +191,7 @@ func generateWallet() {
 
 	privateKeyEncryptedString := base64.StdEncoding.EncodeToString(privateKeyEncrypted)
 
-	wallet := Wallet{
+	wallet := model.Wallet{
 		PrivateKeyEncrypted: privateKeyEncryptedString,
 		PublicKeyPlain:      publicKeyString,
 	}
@@ -206,9 +207,4 @@ func generateWallet() {
 		panic("could write wallet json")
 		return
 	}
-}
-
-type Wallet struct {
-	PrivateKeyEncrypted string `json:"privateKeyEncrypted"`
-	PublicKeyPlain      string `json:"publicKeyPlain"`
 }
