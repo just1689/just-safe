@@ -23,7 +23,7 @@
 - [x] API - Get a password
 - [x] Multi-username per site support
 - [ ] Protect all controllers with *wallet password*
-- [ ] Randomize padding string and store padding string
+- [x] Randomize padding string and store padding string
 - [x] Dockerfile
 - [x] Push to registry
 - [x] Docker test in GCP
