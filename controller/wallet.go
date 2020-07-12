@@ -29,7 +29,7 @@ func GetWalletV1() (wallet model.Wallet, err error) {
 	return
 }
 
-func CreateWalletV1(name, password string) (err error) {
+func CreateWalletV1(password string) (err error) {
 
 	// Create private key, public key
 	private, public := asymmetric.GenerateKeys()

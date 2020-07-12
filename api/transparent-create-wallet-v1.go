@@ -36,6 +36,6 @@ func createWalletV1(writer http.ResponseWriter, request *http.Request) {
 		return
 	}
 
-	controller.CreateWalletV1("wallet", password)
+	controller.CreateWalletV1(password)
 
 }
