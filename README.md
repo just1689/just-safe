@@ -5,7 +5,7 @@ The goal of this project is to provide a self-hosted password manager.
 ## What I would like the project to achieve
 
 - Trustless. Deploy to the cloud without having to trust your cloud provider.
-- Secure. Use sound encryption libraries and techniques.
+- Secure. Use sound encryption libraries and techniques. Welcome critique.
 - Unopinionated about where you hosting. Local or cloud.
 - Extensible through an API.
 
