@@ -22,7 +22,7 @@
 - [x] API - Add a password
 - [x] API - Get a password
 - [x] Multi-username per site support
-- [ ] Protect all controllers with *wallet password*
+- [x] Protect all controllers with *wallet password*
 - [x] Randomize padding string and store padding string
 - [x] Dockerfile
 - [x] Push to registry
