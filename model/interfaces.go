@@ -15,5 +15,5 @@ type FileWriter interface {
 }
 
 type FileLister interface {
-	ListFiles(path string) (out chan string, err error)
+	ListFiles() (out chan string, err error)
 }
