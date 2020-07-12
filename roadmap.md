@@ -35,7 +35,6 @@
 - [x] API - Encrypted endpoints /encrypted/api/...
 - [x] API - Encrypted - Generate private and public key for the server instance.
 - [x] API - Encrypted - Store private and public key
-- [x] API - Encrypted - Decryptg incoming http request body with private key
 - [x] API - Encrypted - Decrypt incoming http request body with private key
 - [ ] Client side - Desktop app
 - [ ] Client side - Call API
