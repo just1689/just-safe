@@ -8,7 +8,6 @@ import (
 	"github.com/just1689/just-safe/util/encryption/asymmetric"
 	"github.com/just1689/just-safe/util/encryption/symmetric"
 	"github.com/sirupsen/logrus"
-	"io/ioutil"
 )
 
 func AddPasswordV1(wallet, site, username, password string) (err error) {
@@ -17,7 +16,7 @@ func AddPasswordV1(wallet, site, username, password string) (err error) {
 	logrus.Println("Password:", password)
 
 	//Load the wallet
-	b, err := ioutil.ReadFile(fmt.Sprintf("%s/wallet.json", wallet))
+	b, err := model.StorageDriver.ReadFile(fmt.Sprintf("%s/wallet.json", wallet))
 	if err != nil {
 		logrus.Errorln(err)
 		logrus.Errorln(fmt.Sprintln("could not read wallet", wallet))
@@ -63,7 +62,7 @@ func AddPasswordV1(wallet, site, username, password string) (err error) {
 	}
 	out := fmt.Sprintf("%s/%s.site.json", wallet, site)
 	fmt.Println(out)
-	ioutil.WriteFile(out, b, 0644)
+	model.StorageDriver.WriteFile(out, b)
 	return
 }
 
@@ -72,7 +71,7 @@ func GetPasswordV1(wallet, site, walletPassword, username string) (sitePassword 
 	logrus.Println("Username:", username)
 	logrus.Println("Wallet password:", walletPassword)
 
-	b, err := ioutil.ReadFile(fmt.Sprintf("%s/wallet.json", wallet))
+	b, err := model.StorageDriver.ReadFile(fmt.Sprintf("%s/wallet.json", wallet))
 	if err != nil {
 		logrus.Errorln(err)
 		logrus.Errorln("could not load wallet json")
@@ -103,7 +102,7 @@ func GetPasswordV1(wallet, site, walletPassword, username string) (sitePassword 
 	}
 
 	in := fmt.Sprintf("%s/%s.site.json", wallet, site)
-	siteBytes, err := ioutil.ReadFile(in)
+	siteBytes, err := model.StorageDriver.ReadFile(in)
 	if err != nil {
 		logrus.Errorln(err)
 		logrus.Errorln("could not read the site json")

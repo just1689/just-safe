@@ -4,6 +4,7 @@ import (
 	"flag"
 	"fmt"
 	"github.com/just1689/just-safe/controller"
+	"github.com/just1689/just-safe/model"
 	"github.com/sirupsen/logrus"
 )
 
@@ -14,8 +15,18 @@ var username = flag.String("username", "", "username")
 var password = flag.String("password", "", "password")
 var get = flag.String("get", "", "get password")
 
+var driver = flag.String("driver", "local", "Storage driver to use")
+
 func main() {
 	flag.Parse()
+
+	if *driver == "local" {
+		model.StorageDriver = model.LocalDriver{}
+	}
+
+	if model.StorageDriver == nil {
+		panic("no storage driver, exiting")
+	}
 
 	if *generate != "" {
 		generateWallet()

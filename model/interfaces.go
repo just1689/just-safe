@@ -1,6 +1,6 @@
-package storage
+package model
 
-type Driver struct {
+type Driver interface {
 	DirCreator
 	FileReader
 	FileWriter
@@ -8,7 +8,7 @@ type Driver struct {
 }
 
 type DirCreator interface {
-	CreateDir(path string) error
+	CreateDir(path string)
 }
 
 type FileReader interface {
