@@ -26,13 +26,17 @@
 - [ ] Protect all controllers with *wallet password*
 - [ ] Randomize padding string and store padding string
 - [ ] Look into the security model and call for evaluation
+- [ ] Dockerfile
+- [ ] Push to registry
+- [ ] Docker test in GCP
+
 
 
 ### Phase 2
 - [ ] API - Encrypted endpoints /encrypted/api/...
 - [ ] API - Encrypted - Generate private and public key for the server instance.
 - [ ] API - Encrypted - Store private and public key
-- [ ] API - Encrypted - Decrypt incoming http request body with private key
+- [ ] API - Encrypted - Decryptg incoming http request body with private key
 - [ ] API - Encrypted - Decrypt incoming http request body with private key
 - [ ] Client side - Desktop app
 - [ ] Client side - Call API
