@@ -1,6 +1,7 @@
 package stowc
 
 import (
+	"bytes"
 	"github.com/graymeta/stow"
 	stowgs "github.com/graymeta/stow/google"
 	"github.com/sirupsen/logrus"
@@ -51,9 +52,11 @@ func (g GenericDriver) ReadFile(path string) (b []byte, err error) {
 	return
 }
 
-func (g GenericDriver) WriteFile(path string, data []byte) (err error) {
-	//Implement
-	return nil
+func (g GenericDriver) WriteFile(name string, data []byte) (err error) {
+	r := bytes.NewReader(data)
+	size := int64(len(data))
+	_, err = (*g.client).Put(name, r, size, nil)
+	return
 }
 
 func (g GenericDriver) ListFiles() (out chan string, err error) {
