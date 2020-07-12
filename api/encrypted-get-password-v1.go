@@ -31,10 +31,16 @@ func encryptedGetPasswordV1(writer http.ResponseWriter, request *http.Request) {
 	site, foundSite := body["site"]
 	username, foundUsername := body["username"]
 	password, foundPassword := body["password"]
-
 	if !foundPassword || !foundUsername || !foundSite {
 		logrus.Errorln("could not find field of [username, password, site] in body")
 		writer.WriteHeader(http.StatusBadRequest)
+		return
+	}
+
+	walletPasswordOK := controller.CheckPassword(password)
+	if !walletPasswordOK {
+		logrus.Errorln("bad password")
+		writer.WriteHeader(http.StatusUnauthorized)
 		return
 	}
 
