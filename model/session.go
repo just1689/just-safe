@@ -8,13 +8,13 @@ import (
 )
 
 type Session struct {
-	PrivateKey string `json:"privateKey"`
-	PublicKey  string `json:"publicKey"`
+	PrivateKey string `json:"privateKey,omitempty"`
+	PublicKey  string `json:"publicKey,omitempty"`
 }
 
 func GetSessionFilename() string {
-	n := time.Now()
-	return fmt.Sprintf("session.%v-%v-%v.json", n.Year(), n.Month(), n.Day())
+	d, m, y := time.Now().Date()
+	return fmt.Sprintf("session.%v-%v-%v.json", y, int(m), d)
 }
 
 func GetSessionFromBytes(b []byte) *Session {
