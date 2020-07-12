@@ -54,7 +54,7 @@ func AddPasswordV1(wallet, site, username, password string) (err error) {
 		Username: username,
 		Password: passwordStringEncrypted,
 	}
-	b, err = json.Marshal(site)
+	b, err = json.Marshal(s)
 	if err != nil {
 		logrus.Errorln(err)
 		logrus.Errorln("could marshal site to json")
