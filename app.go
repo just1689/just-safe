@@ -12,6 +12,9 @@ import (
 func main() {
 	flag.Parse()
 	logrus.Infoln("Starting up...")
+	logrus.Infoln("")
+	logrus.Infoln("")
+	logrus.Infoln("")
 	driver := os.Getenv("driver")
 	if driver == "" {
 		driver = "google" //TODO: replace with local
