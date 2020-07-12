@@ -18,7 +18,6 @@
 - [x] Storage - interfaces
 - [x] Storage - Create local storage driver
 - [x] Storage - Swap to Stow
-- [ ] Storage - docs showing how to collect
 - [x] API - create wallet
 - [x] API - Add a password
 - [x] API - Get a password
@@ -48,5 +47,6 @@
 - [ ] Docs for `stow`
 - [ ] Docs setup on GCP
 - [ ] Docs setup locally
+- [ ] Storage - docs showing how to collect
 
  
