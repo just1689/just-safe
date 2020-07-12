@@ -3,35 +3,25 @@ package stowc
 import (
 	"bytes"
 	"github.com/graymeta/stow"
-	stowgs "github.com/graymeta/stow/google"
-	"github.com/sirupsen/logrus"
 	"io/ioutil"
 	"log"
-	"os"
 )
+
+var DRIVER_GOOGLE = "google"
+var DRIVER_LOCAL = "local"
 
 type GenericDriver struct {
 	client *stow.Container
 }
 
-func (g *GenericDriver) InitGoogle() {
-	stowLoc, err := stow.Dial(stowgs.Kind, stow.ConfigMap{
-		stowgs.ConfigJSON:      os.Getenv("GOOGLE_JSON"),
-		stowgs.ConfigProjectId: os.Getenv("GOOGLE_PROJECT_ID"),
-	})
-	if err != nil {
-		logrus.Errorln(err)
-		logrus.Errorln("could not connect to cloud storage")
-		panic(err)
+func (g *GenericDriver) Init(driver string) {
+	if driver == DRIVER_GOOGLE {
+		g.initGoogle()
+		return
+		//} else if driver == DRIVER_LOCAL {
+		//	g.initLocal()
+		//	return
 	}
-	stowBucket, err := stowLoc.Container(os.Getenv("BUCKET"))
-	if err != nil {
-		logrus.Errorln(err)
-		logrus.Errorln("could not connect to cloud storage")
-		panic(err)
-	}
-	g.client = &stowBucket
-
 }
 
 func (g GenericDriver) ReadFile(path string) (b []byte, err error) {
