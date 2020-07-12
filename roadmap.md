@@ -9,9 +9,10 @@
 - [x] Decrypt  asymmetrically
 - [x] Add password core
 - [x] Get password core
-- [ ] Controller - create wallet
-- [ ] Controller - add a password
-- [ ] Controller - get a password
+- [x] Controller - create wallet
+- [x] Controller - add a password
+- [x] Controller - get a password
+- [ ] Test controller
 - [ ] API - create wallet
 - [ ] API - Add a password
 - [ ] API - Get a password
