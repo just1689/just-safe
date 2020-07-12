@@ -13,9 +13,9 @@
 - [x] Controller - add a password
 - [x] Controller - get a password
 - [x] Test controller
-- [ ] Storage - interfaces
-- [ ] Storage - Create local storage driver
-- [ ] Storage - Swat to Stow
+- [x] Storage - interfaces
+- [x] Storage - Create local storage driver
+- [ ] Storage - Swap to Stow
 - [ ] Storage - docs showing how to collect
 - [ ] API - create wallet
 - [ ] API - Add a password
