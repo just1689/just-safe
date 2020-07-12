@@ -15,7 +15,7 @@
 - [x] Test controller
 - [x] Storage - interfaces
 - [x] Storage - Create local storage driver
-- [ ] Storage - Swap to Stow
+- [x] Storage - Swap to Stow
 - [ ] Storage - docs showing how to collect
 - [ ] API - create wallet
 - [ ] API - Add a password
