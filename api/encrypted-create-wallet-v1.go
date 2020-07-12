@@ -7,7 +7,7 @@ import (
 	"net/http"
 )
 
-func encryptedAddPasswordV1(writer http.ResponseWriter, request *http.Request) {
+func encryptedCreateWalletV1(writer http.ResponseWriter, request *http.Request) {
 	defer request.Body.Close()
 	stop, b, err := ReadBody(writer, request)
 	if stop {
@@ -28,20 +28,12 @@ func encryptedAddPasswordV1(writer http.ResponseWriter, request *http.Request) {
 		return
 	}
 
-	site, foundSite := body["site"]
-	username, foundUsername := body["username"]
-	password, foundPassword := body["password"]
-	if !foundPassword || !foundUsername || !foundSite {
-		logrus.Errorln("could not find field of [username, password, site] in body")
+	password, found := body["password"]
+	if !found {
+		logrus.Errorln("could not find password in body")
 		writer.WriteHeader(http.StatusBadRequest)
 		return
 	}
+	controller.CreateWalletV1("wallet", password)
 
-	err = controller.AddPasswordV1(site, username, password)
-	if err != nil {
-		logrus.Errorln(err)
-		writer.WriteHeader(http.StatusInternalServerError)
-		return
-	}
-	writer.WriteHeader(http.StatusCreated)
 }
