@@ -18,6 +18,8 @@ func CreateSession() (session model.Session, err error) {
 		}
 	}
 
+	go GCSessions()
+
 	private, public := generatePrivatePublicKeyPair64()
 	s := model.Session{
 		PrivateKey: private,
@@ -44,4 +46,26 @@ func generatePrivatePublicKeyPair64() (private, public string) {
 	public = base64.StdEncoding.EncodeToString(publ)
 	return
 
+}
+
+func GCSessions() {
+	logrus.Infoln("> Starting GC")
+	out, err := model.StorageDriver.ListFiles()
+	if err != nil {
+		logrus.Errorln(err)
+		return
+	}
+	for filename := range out {
+		if model.IsSessionFilename(filename) {
+			if model.GetSessionFilename() != filename {
+				logrus.Infoln(">> Deleting old session", filename)
+				err := model.StorageDriver.DeleteFile(filename)
+				if err != nil {
+					logrus.Errorln("   FAIL")
+				} else {
+					logrus.Infoln("   OK")
+				}
+			}
+		}
+	}
 }
