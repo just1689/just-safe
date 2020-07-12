@@ -3,7 +3,7 @@ package main
 import (
 	"flag"
 	"github.com/just1689/just-safe/api"
-	"github.com/just1689/just-safe/client/stowc"
+	"github.com/just1689/just-safe/client/storage"
 	"github.com/sirupsen/logrus"
 	"os"
 )
@@ -20,11 +20,11 @@ func main() {
 	}
 
 	if driver != "" {
-		d := stowc.GenericDriver{}
+		d := storage.GenericDriver{}
 		d.Init(driver)
-		stowc.StorageDriver = d
+		storage.StorageDriver = d
 	}
-	if stowc.StorageDriver == nil {
+	if storage.StorageDriver == nil {
 		panic("no storage driver, exiting")
 	}
 

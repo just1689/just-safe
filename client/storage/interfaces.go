@@ -1,4 +1,4 @@
-package stowc
+package storage
 
 type Driver interface {
 	FileReader

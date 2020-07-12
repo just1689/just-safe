@@ -1,4 +1,4 @@
-package stowc
+package storage
 
 import (
 	"bytes"

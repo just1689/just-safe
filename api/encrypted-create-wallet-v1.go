@@ -2,7 +2,7 @@ package api
 
 import (
 	"encoding/json"
-	"github.com/just1689/just-safe/client/stowc"
+	"github.com/just1689/just-safe/client/storage"
 	"github.com/just1689/just-safe/controller"
 	"github.com/just1689/just-safe/model"
 	"github.com/sirupsen/logrus"
@@ -37,7 +37,7 @@ func encryptedCreateWalletV1(writer http.ResponseWriter, request *http.Request) 
 		return
 	}
 
-	_, err = stowc.StorageDriver.ReadFile(model.WalletFilename)
+	_, err = storage.StorageDriver.ReadFile(model.WalletFilename)
 	if err == nil {
 		logrus.Errorln("wallet already exists")
 		writer.WriteHeader(http.StatusBadRequest)
