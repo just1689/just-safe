@@ -3,13 +3,11 @@ package api
 import (
 	"encoding/base64"
 	"encoding/json"
-	"fmt"
 	"github.com/just1689/just-safe/model"
 	"github.com/just1689/just-safe/util/encryption/asymmetric"
 	"github.com/sirupsen/logrus"
 	"io/ioutil"
 	"net/http"
-	"time"
 )
 
 func ReadBody(writer http.ResponseWriter, request *http.Request) (stop bool, b []byte, err error) {
@@ -32,9 +30,7 @@ func DecryptBody(b []byte) (payload []byte, err error) {
 		return
 	}
 
-	n := time.Now()
-
-	filename := fmt.Sprintf("session.%v-%v-%v.json", n.Year(), n.Month(), n.Day())
+	filename := model.GetSessionFilename()
 	sessionBytes, err := model.StorageDriver.ReadFile(filename)
 	if err != nil {
 		logrus.Errorln("could not unmarshal read session")
@@ -45,7 +41,6 @@ func DecryptBody(b []byte) (payload []byte, err error) {
 	s := &model.Session{}
 	err = json.Unmarshal(sessionBytes, s)
 	if err != nil {
-		ok = false
 		logrus.Errorln("could not unmarshal bytes")
 		logrus.Errorln(err)
 		return
