@@ -12,7 +12,11 @@
 - [x] Controller - create wallet
 - [x] Controller - add a password
 - [x] Controller - get a password
-- [ ] Test controller
+- [x] Test controller
+- [ ] Storage - interfaces
+- [ ] Storage - Create local storage driver
+- [ ] Storage - Swat to Stow
+- [ ] Storage - docs showing how to collect
 - [ ] API - create wallet
 - [ ] API - Add a password
 - [ ] API - Get a password
