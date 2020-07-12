@@ -6,7 +6,6 @@ import (
 	"github.com/graymeta/stow"
 	"github.com/pkg/errors"
 	"io/ioutil"
-	"log"
 )
 
 var DRIVER_GOOGLE = "google"
@@ -57,19 +56,22 @@ func (g GenericDriver) WriteFile(name string, data []byte) (err error) {
 }
 
 func (g GenericDriver) ListFiles() (out chan string, err error) {
-	out = make(chan string)
+	out = make(chan string, 256)
+	defer close(out)
 	err = stow.Walk(*g.client, stow.NoPrefix, 100, func(item stow.Item, err error) error {
 		if err != nil {
 			return err
 		}
-		log.Println(item.Name())
 		out <- item.Name()
 		return nil
 	})
-	close(out)
 	if err != nil {
 		return
 	}
 	return
 
+}
+
+func (g GenericDriver) DeleteFile(f string) (err error) {
+	return (*g.client).RemoveItem(f)
 }
