@@ -18,6 +18,7 @@ func Listen() {
 
 	//Second-layer encrypted
 	http.HandleFunc("/api/encrypted/createWallet/v1", encryptedCreateWalletV1)
+	http.HandleFunc("/api/encrypted/getPassword/v1", encryptedGetPasswordV1)
 	http.HandleFunc("/api/encrypted/addPassword/v1", encryptedAddPasswordV1)
 	http.ListenAndServe(fmt.Sprintf(":%s", os.Getenv("PORT")), nil)
 
