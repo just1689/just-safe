@@ -3,6 +3,7 @@ package api
 import (
 	"encoding/base64"
 	"encoding/json"
+	"github.com/just1689/just-safe/client/stowc"
 	"github.com/just1689/just-safe/model"
 	"github.com/just1689/just-safe/util/encryption/asymmetric"
 	"github.com/sirupsen/logrus"
@@ -31,7 +32,7 @@ func DecryptBody(b []byte) (payload []byte, err error) {
 	}
 
 	filename := model.GetSessionFilename()
-	sessionBytes, err := model.StorageDriver.ReadFile(filename)
+	sessionBytes, err := stowc.StorageDriver.ReadFile(filename)
 	if err != nil {
 		logrus.Errorln("could not unmarshal read session")
 		logrus.Errorln(err)

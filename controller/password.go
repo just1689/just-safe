@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"github.com/just1689/just-safe/client/stowc"
 	"github.com/just1689/just-safe/model"
 	"github.com/just1689/just-safe/util/encryption/asymmetric"
 	"github.com/just1689/just-safe/util/encryption/symmetric"
@@ -14,7 +15,7 @@ import (
 func AddPasswordV1(site, username, password string) (err error) {
 
 	//Load the wallet
-	b, err := model.StorageDriver.ReadFile(fmt.Sprintf(model.WalletFilename))
+	b, err := stowc.StorageDriver.ReadFile(fmt.Sprintf(model.WalletFilename))
 	if err != nil {
 		logrus.Errorln(err)
 		logrus.Errorln("could not read wallet")
@@ -60,12 +61,12 @@ func AddPasswordV1(site, username, password string) (err error) {
 
 	}
 	filename := model.GetSiteFilename(site)
-	model.StorageDriver.WriteFile(filename, b)
+	stowc.StorageDriver.WriteFile(filename, b)
 	return
 }
 
 func GetPasswordV1(site, walletPassword, username string) (sitePassword string, err error) {
-	b, err := model.StorageDriver.ReadFile(fmt.Sprintf(model.WalletFilename))
+	b, err := stowc.StorageDriver.ReadFile(fmt.Sprintf(model.WalletFilename))
 	if err != nil {
 		logrus.Errorln(err)
 		logrus.Errorln("could not load wallet json")
@@ -164,7 +165,7 @@ func CheckPassword(walletPassword string) bool {
 
 func readSite(site string) (s *model.Site, err error) {
 	filename := model.GetSiteFilename(site)
-	siteBytes, err := model.StorageDriver.ReadFile(filename)
+	siteBytes, err := stowc.StorageDriver.ReadFile(filename)
 	if err != nil {
 		return
 	}

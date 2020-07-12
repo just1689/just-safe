@@ -4,6 +4,7 @@ import (
 	"encoding/base64"
 	"encoding/json"
 	"fmt"
+	"github.com/just1689/just-safe/client/stowc"
 	"github.com/just1689/just-safe/model"
 	"github.com/just1689/just-safe/util"
 	"github.com/just1689/just-safe/util/encryption/asymmetric"
@@ -12,7 +13,7 @@ import (
 )
 
 func GetWalletV1() (wallet model.Wallet, err error) {
-	b, err := model.StorageDriver.ReadFile(model.WalletFilename)
+	b, err := stowc.StorageDriver.ReadFile(model.WalletFilename)
 	if err != nil {
 		logrus.Errorln("could not open wallet json file")
 		logrus.Errorln(err)
@@ -59,7 +60,7 @@ func CreateWalletV1(password string) (err error) {
 		logrus.Errorln("could not marshall wallet to json")
 		return
 	}
-	err = model.StorageDriver.WriteFile(fmt.Sprintf(model.WalletFilename), b)
+	err = stowc.StorageDriver.WriteFile(fmt.Sprintf(model.WalletFilename), b)
 	if err != nil {
 		logrus.Errorln(err)
 		logrus.Errorln("could write wallet json")

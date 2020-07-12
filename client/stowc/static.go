@@ -1,3 +1,3 @@
-package model
+package stowc
 
 var StorageDriver Driver

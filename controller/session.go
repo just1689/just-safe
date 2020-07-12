@@ -3,6 +3,7 @@ package controller
 import (
 	"encoding/base64"
 	"encoding/json"
+	"github.com/just1689/just-safe/client/stowc"
 	"github.com/just1689/just-safe/model"
 	"github.com/just1689/just-safe/util/encryption/asymmetric"
 	"github.com/sirupsen/logrus"
@@ -10,7 +11,7 @@ import (
 
 func CreateSession() (session model.Session, err error) {
 	filename := model.GetSessionFilename()
-	b, err := model.StorageDriver.ReadFile(filename)
+	b, err := stowc.StorageDriver.ReadFile(filename)
 	if err == nil {
 		session := model.GetSessionFromBytes(b)
 		if session != nil {
@@ -31,7 +32,7 @@ func CreateSession() (session model.Session, err error) {
 		logrus.Errorln(err)
 		return
 	}
-	err = model.StorageDriver.WriteFile(filename, b)
+	err = stowc.StorageDriver.WriteFile(filename, b)
 	if err != nil {
 		logrus.Errorln("could not create session file")
 		logrus.Errorln(err)
@@ -50,7 +51,7 @@ func generatePrivatePublicKeyPair64() (private, public string) {
 
 func GCSessions() {
 	logrus.Infoln("> Starting GC")
-	out, err := model.StorageDriver.ListFiles()
+	out, err := stowc.StorageDriver.ListFiles()
 	if err != nil {
 		logrus.Errorln(err)
 		return
@@ -59,7 +60,7 @@ func GCSessions() {
 		if model.IsSessionFilename(filename) {
 			if model.GetSessionFilename() != filename {
 				logrus.Infoln(">> Deleting old session", filename)
-				err := model.StorageDriver.DeleteFile(filename)
+				err := stowc.StorageDriver.DeleteFile(filename)
 				if err != nil {
 					logrus.Errorln("   FAIL")
 				} else {
