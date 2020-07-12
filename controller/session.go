@@ -1,8 +1,10 @@
 package controller
 
 import (
+	"encoding/base64"
 	"encoding/json"
 	"github.com/just1689/just-safe/model"
+	"github.com/just1689/just-safe/util/encryption/asymmetric"
 	"github.com/sirupsen/logrus"
 )
 
@@ -15,7 +17,12 @@ func CreateSession() (session model.Session, err error) {
 			return *session, nil
 		}
 	}
-	s := model.Session{}
+
+	private, public := generatePrivatePublicKeyPair64()
+	s := model.Session{
+		PrivateKey: private,
+		PublicKey:  public,
+	}
 	b, err = json.Marshal(s)
 	if err != nil {
 		logrus.Errorln("could not marshal session")
@@ -29,4 +36,12 @@ func CreateSession() (session model.Session, err error) {
 		return
 	}
 	return s, nil
+}
+
+func generatePrivatePublicKeyPair64() (private, public string) {
+	priv, publ := asymmetric.GenerateKeys()
+	private = base64.StdEncoding.EncodeToString(priv)
+	public = base64.StdEncoding.EncodeToString(publ)
+	return
+
 }
