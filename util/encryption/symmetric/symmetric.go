@@ -6,29 +6,8 @@ import (
 	"crypto/rand"
 	"encoding/base64"
 	"errors"
-	"fmt"
 	"io"
-	"log"
 )
-
-func main() {
-	key := []byte("a very very very very secret key") // 32 bytes
-	plaintext := []byte("some really really really long plaintext")
-	fmt.Printf("%s\n", plaintext)
-	ciphertext, err := Encrypt(key, plaintext)
-	if err != nil {
-		log.Fatal(err)
-	}
-	fmt.Printf("%0x\n", ciphertext)
-	result, err := Decrypt(key, ciphertext)
-	if err != nil {
-		log.Fatal(err)
-	}
-	fmt.Printf("%s\n", result)
-}
-
-// See alternate IV creation from ciphertext below
-//var iv = []byte{35, 46, 57, 24, 85, 35, 24, 74, 87, 35, 88, 98, 66, 32, 14, 05}
 
 func Pad(in []byte, with string) []byte {
 	if with == "" {
