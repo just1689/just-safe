@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/just1689/just-safe/model"
+	"github.com/just1689/just-safe/util"
 	"github.com/just1689/just-safe/util/encryption/asymmetric"
 	"github.com/just1689/just-safe/util/encryption/symmetric"
 	"github.com/sirupsen/logrus"
@@ -18,7 +19,8 @@ func CreateWalletV1(name, password string) (err error) {
 
 	//Encrypt the private key with the password
 	p := []byte(password)
-	p = symmetric.Pad(p)
+	salt := util.RandStringRunes(32)
+	p = symmetric.Pad(p, salt)
 	privateKeyEncrypted, err := symmetric.Encrypt(p, private)
 	if err != nil {
 		logrus.Errorln(err)
@@ -31,6 +33,7 @@ func CreateWalletV1(name, password string) (err error) {
 	wallet := model.Wallet{
 		PrivateKeyEncrypted: privateKeyEncryptedString,
 		PublicKeyPlain:      publicKeyString,
+		Salt:                salt,
 	}
 	b, err := json.Marshal(wallet)
 	if err != nil {
