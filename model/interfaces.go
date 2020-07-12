@@ -4,6 +4,7 @@ type Driver interface {
 	FileReader
 	FileWriter
 	FileLister
+	FileDeleter
 }
 
 type FileReader interface {
@@ -16,4 +17,8 @@ type FileWriter interface {
 
 type FileLister interface {
 	ListFiles() (out chan string, err error)
+}
+
+type FileDeleter interface {
+	DeleteFile(f string) (err error)
 }
