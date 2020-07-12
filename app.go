@@ -24,12 +24,23 @@ func main() {
 	if *driver == "local" {
 		model.StorageDriver = model.LocalDriver{}
 	} else if *driver == "google" {
-		model.StorageDriver = stowc.GoogleDriver{}
+		d := stowc.GenericDriver{}
+		d.InitGoogle()
+		model.StorageDriver = d
 	}
 
 	if model.StorageDriver == nil {
 		panic("no storage driver, exiting")
 	}
+
+	gets := "google.com"
+	get = &gets
+
+	usernames := "username"
+	username = &usernames
+
+	passwords := "123"
+	password = &passwords
 
 	if *generate != "" {
 		generateWallet()
@@ -49,7 +60,7 @@ func main() {
 }
 
 func getSite() {
-	p, err := controller.GetPasswordV1(*wallet, *get, *password, *username)
+	p, err := controller.GetPasswordV1(*get, *password, *username)
 	if err != nil {
 		logrus.Errorln(err)
 		panic(err)
@@ -58,7 +69,7 @@ func getSite() {
 }
 
 func addSite() {
-	err := controller.AddPasswordV1(*wallet, *add, *username, *password)
+	err := controller.AddPasswordV1(*add, *username, *password)
 	if err != nil {
 		logrus.Errorln(err)
 		panic(err)
