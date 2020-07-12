@@ -10,16 +10,16 @@ import (
 	"github.com/sirupsen/logrus"
 )
 
-func AddPasswordV1(wallet, site, username, password string) (err error) {
+func AddPasswordV1(site, username, password string) (err error) {
 	logrus.Println("Site:", site)
 	logrus.Println("Username:", username)
 	logrus.Println("Password:", password)
 
 	//Load the wallet
-	b, err := model.StorageDriver.ReadFile(fmt.Sprintf("%s/wallet.json", wallet))
+	b, err := model.StorageDriver.ReadFile(fmt.Sprintf("wallet.json"))
 	if err != nil {
 		logrus.Errorln(err)
-		logrus.Errorln(fmt.Sprintln("could not read wallet", wallet))
+		logrus.Errorln("could not read wallet")
 		return
 	}
 	w := &model.Wallet{}
@@ -60,18 +60,13 @@ func AddPasswordV1(wallet, site, username, password string) (err error) {
 		return
 
 	}
-	out := fmt.Sprintf("%s/%s.site.json", wallet, site)
-	fmt.Println(out)
+	out := fmt.Sprintf("%s.site.json", site)
 	model.StorageDriver.WriteFile(out, b)
 	return
 }
 
-func GetPasswordV1(wallet, site, walletPassword, username string) (sitePassword string, err error) {
-	logrus.Println("Site:", site)
-	logrus.Println("Username:", username)
-	logrus.Println("Wallet password:", walletPassword)
-
-	b, err := model.StorageDriver.ReadFile(fmt.Sprintf("%s/wallet.json", wallet))
+func GetPasswordV1(site, walletPassword, username string) (sitePassword string, err error) {
+	b, err := model.StorageDriver.ReadFile(fmt.Sprintf("wallet.json"))
 	if err != nil {
 		logrus.Errorln(err)
 		logrus.Errorln("could not load wallet json")
@@ -101,7 +96,7 @@ func GetPasswordV1(wallet, site, walletPassword, username string) (sitePassword 
 		return
 	}
 
-	in := fmt.Sprintf("%s/%s.site.json", wallet, site)
+	in := fmt.Sprintf("%s.site.json", site)
 	siteBytes, err := model.StorageDriver.ReadFile(in)
 	if err != nil {
 		logrus.Errorln(err)
@@ -135,7 +130,6 @@ func GetPasswordV1(wallet, site, walletPassword, username string) (sitePassword 
 		return
 	}
 
-	logrus.Println("Decrypted password", string(decrypted))
 	sitePassword = string(decrypted)
 	return
 

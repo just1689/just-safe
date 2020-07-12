@@ -11,7 +11,6 @@ import (
 )
 
 func CreateWalletV1(name, password string) (err error) {
-	model.StorageDriver.CreateDir(name)
 
 	// Create private key, public key
 	private, public := asymmetric.GenerateKeys()
@@ -39,7 +38,7 @@ func CreateWalletV1(name, password string) (err error) {
 		logrus.Errorln("could not marshall wallet to json")
 		return
 	}
-	err = model.StorageDriver.WriteFile(fmt.Sprintf("%s/wallet.json", name), b)
+	err = model.StorageDriver.WriteFile(fmt.Sprintf("wallet.json"), b)
 	if err != nil {
 		logrus.Errorln(err)
 		logrus.Errorln("could write wallet json")
