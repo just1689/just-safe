@@ -1,14 +1,9 @@
 package model
 
 type Driver interface {
-	DirCreator
 	FileReader
 	FileWriter
 	FileLister
-}
-
-type DirCreator interface {
-	CreateDir(path string)
 }
 
 type FileReader interface {

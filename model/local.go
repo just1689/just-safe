@@ -9,12 +9,6 @@ import (
 type LocalDriver struct {
 }
 
-func (d LocalDriver) CreateDir(path string) {
-	if _, err := os.Stat(path); os.IsNotExist(err) {
-		err = os.Mkdir(path, os.ModeDir)
-	}
-}
-
 func (d LocalDriver) ReadFile(path string) (b []byte, err error) {
 	return ioutil.ReadFile(path)
 }
@@ -24,7 +18,7 @@ func (d LocalDriver) WriteFile(path string, data []byte) (err error) {
 }
 
 func (d LocalDriver) ListFiles(p string) (out chan string, err error) {
-	if _, err = os.Stat("/path/to/whatever"); os.IsNotExist(err) {
+	if _, err = os.Stat(p); os.IsNotExist(err) {
 		return
 	}
 	out = make(chan string)
