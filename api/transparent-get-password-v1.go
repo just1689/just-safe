@@ -31,6 +31,13 @@ func getPasswordV1(writer http.ResponseWriter, request *http.Request) {
 		return
 	}
 
+	walletPasswordOK := controller.CheckPassword(password)
+	if !walletPasswordOK {
+		logrus.Errorln("bad password")
+		writer.WriteHeader(http.StatusUnauthorized)
+		return
+	}
+
 	result, err := controller.GetPasswordV1(site, password, username)
 	if err != nil {
 		logrus.Errorln(err)

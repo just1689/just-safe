@@ -139,6 +139,29 @@ func GetPasswordV1(site, walletPassword, username string) (sitePassword string, 
 
 }
 
+func CheckPassword(walletPassword string) bool {
+	w, err := GetWalletV1()
+	if err != nil {
+		logrus.Errorln(err)
+		logrus.Errorln("could not wallet")
+		return false
+	}
+	privateKeyEncryptedBytes, err := base64.StdEncoding.DecodeString(w.PrivateKeyEncrypted)
+	if err != nil {
+		logrus.Errorln("could not get password")
+		//TODO: handle errors in a more correct way
+		return false
+	}
+
+	p := []byte(walletPassword)
+	p = symmetric.Pad(p, w.Salt)
+	privateKeyBytes, err := symmetric.Decrypt(p, privateKeyEncryptedBytes)
+	if err != nil {
+		return false
+	}
+	return len(privateKeyBytes) > 0
+}
+
 func readSite(site string) (s *model.Site, err error) {
 	filename := model.GetSiteFilename(site)
 	siteBytes, err := model.StorageDriver.ReadFile(filename)

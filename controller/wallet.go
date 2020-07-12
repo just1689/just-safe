@@ -11,6 +11,24 @@ import (
 	"github.com/sirupsen/logrus"
 )
 
+func GetWalletV1() (wallet model.Wallet, err error) {
+	b, err := model.StorageDriver.ReadFile("wallet.json")
+	if err != nil {
+		logrus.Errorln("could not open wallet.json")
+		logrus.Errorln(err)
+		return
+	}
+	w := &model.Wallet{}
+	err = json.Unmarshal(b, w)
+	if err != nil {
+		logrus.Errorln(err)
+		logrus.Errorln("could not unmarshal wallet")
+		return
+	}
+	wallet = *w
+	return
+}
+
 func CreateWalletV1(name, password string) (err error) {
 
 	// Create private key, public key
