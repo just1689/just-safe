@@ -17,6 +17,7 @@ func ReadBody(writer http.ResponseWriter, request *http.Request) (stop bool, b [
 	b, err = ioutil.ReadAll(request.Body)
 	if err != nil {
 		writer.WriteHeader(http.StatusBadRequest)
+		writer.Write([]byte(`{"msg": "Bad request body"}`))
 		stop = true
 		return
 	}
