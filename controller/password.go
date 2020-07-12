@@ -87,11 +87,11 @@ func GetPasswordV1(site, walletPassword, username string) (sitePassword string, 
 	}
 
 	p := []byte(walletPassword)
-	p = symmetric.Pad(p)
+	p = symmetric.Pad(p, w.Salt)
 	privateKeyBytes, err := symmetric.Decrypt(p, privateKeyEncryptedBytes)
 	if err != nil {
 		logrus.Errorln(err)
-		logrus.Errorln("could not descrypt private key with the password")
+		logrus.Errorln("could not decrypt private key with the password")
 		return
 	}
 
