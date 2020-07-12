@@ -33,7 +33,7 @@ func getPasswordV1(writer http.ResponseWriter, request *http.Request) {
 		return
 	}
 
-	result, err := controller.GetPasswordV1(site, username, password)
+	result, err := controller.GetPasswordV1(site, password, username)
 	if err != nil {
 		logrus.Errorln(err)
 		writer.WriteHeader(http.StatusInternalServerError)
