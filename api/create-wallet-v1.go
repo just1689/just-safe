@@ -9,6 +9,7 @@ import (
 )
 
 func createWalletV1(writer http.ResponseWriter, request *http.Request) {
+	defer request.Body.Close()
 	b, err := ioutil.ReadAll(request.Body)
 	if err != nil {
 		logrus.Errorln("could not read body")
