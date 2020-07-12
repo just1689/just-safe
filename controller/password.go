@@ -3,6 +3,7 @@ package controller
 import (
 	"encoding/base64"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"github.com/just1689/just-safe/model"
 	"github.com/just1689/just-safe/util/encryption/asymmetric"
@@ -11,9 +12,6 @@ import (
 )
 
 func AddPasswordV1(site, username, password string) (err error) {
-	logrus.Println("Site:", site)
-	logrus.Println("Username:", username)
-	logrus.Println("Password:", password)
 
 	//Load the wallet
 	b, err := model.StorageDriver.ReadFile(fmt.Sprintf("wallet.json"))
@@ -29,7 +27,7 @@ func AddPasswordV1(site, username, password string) (err error) {
 		logrus.Errorln("could not unmarshal wallet")
 		return
 	}
-	var publicKey []byte = make([]byte, 2048)
+	var publicKey = make([]byte, 2048)
 	l, err := base64.StdEncoding.Decode(publicKey, []byte(w.PublicKeyPlain))
 	publicKey = append([]byte(nil), publicKey[:l]...)
 	if err != nil {
@@ -45,14 +43,15 @@ func AddPasswordV1(site, username, password string) (err error) {
 	}
 
 	passwordStringEncrypted := base64.StdEncoding.EncodeToString(encryptedBytes)
-	s := model.Site{
-		Site:    site,
-		Entries: make([]model.Entry, 1),
+
+	s, _ := readSite(site)
+	if s == nil {
+		s = &model.Site{
+			Site:    site,
+			Entries: make([]model.Entry, 0),
+		}
 	}
-	s.Entries[0] = model.Entry{
-		Username: username,
-		Password: passwordStringEncrypted,
-	}
+	s.AddItem(username, passwordStringEncrypted)
 	b, err = json.Marshal(s)
 	if err != nil {
 		logrus.Errorln(err)
@@ -96,27 +95,32 @@ func GetPasswordV1(site, walletPassword, username string) (sitePassword string, 
 		return
 	}
 
-	in := fmt.Sprintf("%s.site.json", site)
-	siteBytes, err := model.StorageDriver.ReadFile(in)
+	s, err := readSite(site)
 	if err != nil {
+		logrus.Errorln("could not read site from storage")
 		logrus.Errorln(err)
-		logrus.Errorln("could not read the site json")
-		return
-	}
-	s := &model.Site{}
-	err = json.Unmarshal(siteBytes, s)
-	if err != nil {
-		logrus.Errorln(err)
-		logrus.Errorln("could not unmarshal site json to bytes")
 		return
 	}
 
-	//TODO: find by username
-	// ...................
-	// ...................
-	// ...................
+	var correctEntry model.Entry
+	found := false
 
-	encryptedPasswordBytes, err := base64.StdEncoding.DecodeString(s.Entries[0].Password)
+	for _, entry := range s.Entries {
+		if entry.Username == username {
+			correctEntry = entry
+			found = true
+			break
+		}
+	}
+
+	if !found {
+		err = errors.New("could not find username in entries")
+		logrus.Errorln(err)
+		logrus.Errorln(err.Error())
+		return
+	}
+
+	encryptedPasswordBytes, err := base64.StdEncoding.DecodeString(correctEntry.Password)
 	if err != nil {
 		logrus.Errorln(err)
 		logrus.Errorln("could not decode encrypted password 64")
@@ -133,4 +137,18 @@ func GetPasswordV1(site, walletPassword, username string) (sitePassword string, 
 	sitePassword = string(decrypted)
 	return
 
+}
+
+func readSite(site string) (s *model.Site, err error) {
+	in := fmt.Sprintf("%s.site.json", site)
+	siteBytes, err := model.StorageDriver.ReadFile(in)
+	if err != nil {
+		return
+	}
+	s = &model.Site{}
+	err = json.Unmarshal(siteBytes, s)
+	if err != nil {
+		return
+	}
+	return
 }
