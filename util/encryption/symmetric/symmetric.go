@@ -34,14 +34,14 @@ func Encrypt(key, text []byte) ([]byte, error) {
 		return nil, err
 	}
 	b := base64.StdEncoding.EncodeToString(text)
-	ciphertext := make([]byte, aes.BlockSize+len(b))
-	iv := ciphertext[:aes.BlockSize]
+	cipherText := make([]byte, aes.BlockSize+len(b))
+	iv := cipherText[:aes.BlockSize]
 	if _, err := io.ReadFull(rand.Reader, iv); err != nil {
 		return nil, err
 	}
 	cfb := cipher.NewCFBEncrypter(block, iv)
-	cfb.XORKeyStream(ciphertext[aes.BlockSize:], []byte(b))
-	return ciphertext, nil
+	cfb.XORKeyStream(cipherText[aes.BlockSize:], []byte(b))
+	return cipherText, nil
 }
 
 func Decrypt(key, text []byte) ([]byte, error) {
