@@ -26,9 +26,10 @@
 - [ ] Protect all controllers with *wallet password*
 - [ ] Randomize padding string and store padding string
 - [ ] Look into the security model and call for evaluation
-- [ ] Dockerfile
-- [ ] Push to registry
-- [ ] Docker test in GCP
+- [x] Dockerfile
+- [x] Push to registry
+- [x] Docker test in GCP
+- [x] Test transparent APIs in GCP
 
 
 
