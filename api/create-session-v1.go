@@ -8,6 +8,7 @@ import (
 )
 
 func createSessionV1(writer http.ResponseWriter, request *http.Request) {
+	defer request.Body.Close()
 	session, err := controller.CreateSession()
 	if err != nil {
 		logrus.Errorln(err)
