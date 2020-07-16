@@ -1,19 +1,15 @@
 package main
 
 import (
-	"bufio"
 	"bytes"
 	"encoding/json"
 	"fmt"
 	"github.com/just1689/just-safe/io"
+	"github.com/just1689/just-safe/model"
 	"github.com/sirupsen/logrus"
-	"golang.org/x/crypto/ssh/terminal"
 	"io/ioutil"
 	"net/http"
 	"os"
-	"runtime"
-	"strings"
-	"syscall"
 	"time"
 )
 
@@ -31,19 +27,13 @@ func main() {
 			logrus.Errorln(err)
 			return
 		}
-		site := input["site"]
-		username := input["username"]
-		password := input["password"]
-		walletPassword := input["walletPassword"]
-
-		url := endpoint + "api/addPassword/v1"
-		body := map[string]string{
-			"site":           site,
-			"username":       username,
-			"walletPassword": walletPassword,
-			"password":       password,
+		item, err := model.MapToItem(input)
+		if err != nil {
+			logrus.Errorln(err)
+			return
 		}
-		b, err := json.Marshal(body)
+		url := endpoint + "api/addPassword/v1"
+		b, err := json.Marshal(item)
 		if err != nil {
 			//handle
 			logrus.Errorln(err)
@@ -64,17 +54,14 @@ func main() {
 			logrus.Errorln(err)
 			return
 		}
-		site := input["site"]
-		username := input["username"]
-		walletPassword := input["walletPassword"]
+		item, err := model.MapToItem(input)
+		if err != nil {
+			logrus.Errorln(err)
+			return
+		}
 
 		url := endpoint + "api/getPassword/v1"
-		body := map[string]string{
-			"site":           site,
-			"username":       username,
-			"walletPassword": walletPassword,
-		}
-		b, err := json.Marshal(body)
+		b, err := json.Marshal(item)
 		if err != nil {
 			//handle
 			logrus.Errorln(err)
@@ -87,7 +74,13 @@ func main() {
 			logrus.Error(err)
 			return
 		}
-		//fmt.Println(resp.StatusCode)
+
+		if resp.StatusCode < 200 || resp.StatusCode > 299 {
+			logrus.Errorln("Failed.")
+			//TODO: get error from server
+			return
+		}
+
 		b, err = ioutil.ReadAll(resp.Body)
 		if err != nil {
 			logrus.Error(err)
@@ -100,9 +93,6 @@ func main() {
 			logrus.Error(err)
 			return
 		}
-
-		//fmt.Println("")
-		//fmt.Println("")
 
 		pass := r["password"]
 		if os.Args[2] == "clipboard" || os.Args[2] == "c" {
@@ -125,33 +115,5 @@ func main() {
 			}
 			keyboard()
 		}
-
 	}
-
-}
-
-func getter() (string, string, string) {
-	reader := bufio.NewReader(os.Stdin)
-	var bytePassword []byte
-	var err error
-
-	fmt.Print("Enter site: ")
-	site, _ := reader.ReadString('\n')
-
-	fmt.Print("Enter Username: ")
-	username, _ := reader.ReadString('\n')
-
-	fmt.Print("Enter Wallet password: ")
-	if runtime.GOOS == "windows" {
-		bytePassword, err = terminal.ReadPassword(int(syscall.Stdin)) // 0 on unix
-	} else {
-		bytePassword, err = terminal.ReadPassword(0)
-	}
-	if err != nil {
-		//Handle error
-		return "", "", ""
-	}
-	walletPassword := string(bytePassword)
-
-	return strings.TrimSpace(site), strings.TrimSpace(username), strings.TrimSpace(walletPassword)
 }
