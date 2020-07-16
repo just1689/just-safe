@@ -59,6 +59,7 @@ func main() {
 			logrus.Error(err)
 			return
 		}
+		fmt.Println(resp.StatusCode)
 		b, err = ioutil.ReadAll(resp.Body)
 		if err != nil {
 			logrus.Error(err)
@@ -76,27 +77,30 @@ func main() {
 		fmt.Println("")
 
 		pass := r["password"]
-		if err := clipboard.WriteAll(pass); err != nil {
-			panic(err)
-		}
-		fmt.Println("COPIED TO CLIPBOARD!")
-		//pressKeys()
-
-		kb, err := keybd_event.NewKeyBonding()
-		if err != nil {
-			panic(err)
-		}
-		keys := make([]BasicFunc, 0)
-		for i := 0; i < len(pass); i++ {
-			keys = append(keys, getNext(string(pass[i]), kb))
+		if os.Args[2] == "clipboard" || os.Args[2] == "c" {
+			if err := clipboard.WriteAll(pass); err != nil {
+				panic(err)
+			}
+			fmt.Println("COPIED TO CLIPBOARD!")
 		}
 
-		for i := 1; i <= 3; i++ {
-			fmt.Println("Writing in", i)
-			time.Sleep(500 * time.Millisecond)
-		}
-		for _, k := range keys {
-			k()
+		if os.Args[2] == "keyboard" || os.Args[2] == "k" {
+			kb, err := keybd_event.NewKeyBonding()
+			if err != nil {
+				panic(err)
+			}
+			keys := make([]BasicFunc, 0)
+			for i := 0; i < len(pass); i++ {
+				keys = append(keys, getNext(string(pass[i]), kb))
+			}
+
+			for i := 1; i <= 3; i++ {
+				fmt.Println("Writing in", i)
+				time.Sleep(500 * time.Millisecond)
+			}
+			for _, k := range keys {
+				k()
+			}
 		}
 
 	}
