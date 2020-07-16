@@ -6,6 +6,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/atotto/clipboard"
+	"github.com/micmonay/keybd_event"
 	"github.com/sirupsen/logrus"
 	"golang.org/x/crypto/ssh/terminal"
 	"io/ioutil"
@@ -14,6 +15,7 @@ import (
 	"runtime"
 	"strings"
 	"syscall"
+	"time"
 )
 
 func main() {
@@ -73,14 +75,35 @@ func main() {
 		fmt.Println("")
 		fmt.Println("")
 
-		if err := clipboard.WriteAll(r["password"]); err != nil {
+		pass := r["password"]
+		if err := clipboard.WriteAll(pass); err != nil {
 			panic(err)
 		}
 		fmt.Println("COPIED TO CLIPBOARD!")
+		//pressKeys()
+
+		kb, err := keybd_event.NewKeyBonding()
+		if err != nil {
+			panic(err)
+		}
+		keys := make([]BasicFunc, 0)
+		for i := 0; i < len(pass); i++ {
+			keys = append(keys, getNext(string(pass[i]), kb))
+		}
+
+		for i := 1; i <= 3; i++ {
+			fmt.Println("Writing in", i)
+			time.Sleep(500 * time.Millisecond)
+		}
+		for _, k := range keys {
+			k()
+		}
 
 	}
 
 }
+
+type BasicFunc func()
 
 func credentials() (string, string, string, string) {
 	reader := bufio.NewReader(os.Stdin)
@@ -145,4 +168,109 @@ func getter() (string, string, string) {
 	walletPassword := string(bytePassword)
 
 	return strings.TrimSpace(site), strings.TrimSpace(username), strings.TrimSpace(walletPassword)
+}
+
+func pressKeys() {
+	kb, err := keybd_event.NewKeyBonding()
+	if err != nil {
+		panic(err)
+	}
+
+	// For linux, it is very important to wait 2 seconds
+	if runtime.GOOS == "linux" {
+		time.Sleep(2 * time.Second)
+	}
+
+	// Select keys to be pressed
+	kb.SetKeys(keybd_event.VK_A, keybd_event.VK_B)
+
+	// Set shift to be pressed
+	kb.HasSHIFT(true)
+
+	// Press the selected keys
+	err = kb.Launching()
+	if err != nil {
+		panic(err)
+	}
+
+	// Or you can use Press and Release
+	kb.Press()
+	time.Sleep(10 * time.Millisecond)
+	kb.Release()
+
+	// Here, the program will generate "ABAB" as if they were pressed on the keyboard.
+}
+
+func getNext(char string, kb keybd_event.KeyBonding) func() {
+	return func() {
+		kb.Clear()
+		if char >= "A" && char <= "Z" {
+			kb.HasSHIFT(true)
+		}
+		key, found := KeyMapping[char]
+		if found {
+			kb.AddKey(key)
+		} else {
+			fmt.Println("could not find key", char)
+		}
+		kb.Press()
+		time.Sleep(10 * time.Millisecond)
+		kb.Release()
+	}
+}
+
+var KeyMapping = map[string]int{
+	"A": keybd_event.VK_A,
+	"a": keybd_event.VK_A,
+	"B": keybd_event.VK_B,
+	"b": keybd_event.VK_B,
+	"C": keybd_event.VK_C,
+	"c": keybd_event.VK_C,
+	"d": keybd_event.VK_D,
+	"D": keybd_event.VK_D,
+	"e": keybd_event.VK_E,
+	"E": keybd_event.VK_E,
+	"f": keybd_event.VK_F,
+	"F": keybd_event.VK_F,
+	"G": keybd_event.VK_G,
+	"g": keybd_event.VK_G,
+	"H": keybd_event.VK_H,
+	"h": keybd_event.VK_H,
+	"I": keybd_event.VK_I,
+	"i": keybd_event.VK_I,
+	"J": keybd_event.VK_J,
+	"j": keybd_event.VK_J,
+	"K": keybd_event.VK_K,
+	"k": keybd_event.VK_K,
+	"L": keybd_event.VK_L,
+	"l": keybd_event.VK_L,
+	"M": keybd_event.VK_M,
+	"m": keybd_event.VK_M,
+	"N": keybd_event.VK_N,
+	"n": keybd_event.VK_N,
+	"O": keybd_event.VK_O,
+	"o": keybd_event.VK_O,
+	"P": keybd_event.VK_P,
+	"p": keybd_event.VK_P,
+	"Q": keybd_event.VK_Q,
+	"q": keybd_event.VK_Q,
+	"R": keybd_event.VK_R,
+	"r": keybd_event.VK_R,
+	"S": keybd_event.VK_S,
+	"s": keybd_event.VK_S,
+	"T": keybd_event.VK_T,
+	"t": keybd_event.VK_T,
+	"U": keybd_event.VK_U,
+	"u": keybd_event.VK_U,
+	"V": keybd_event.VK_V,
+	"v": keybd_event.VK_V,
+	"W": keybd_event.VK_W,
+	"w": keybd_event.VK_W,
+	"X": keybd_event.VK_X,
+	"x": keybd_event.VK_X,
+	"Y": keybd_event.VK_Y,
+	"y": keybd_event.VK_Y,
+	"Z": keybd_event.VK_Z,
+	"z": keybd_event.VK_Z,
+	" ": keybd_event.VK_SPACE,
 }
