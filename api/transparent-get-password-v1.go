@@ -46,11 +46,6 @@ func getPasswordV1(writer http.ResponseWriter, request *http.Request) {
 	body = map[string]string{
 		"password": result,
 	}
-	b, err = json.Marshal(body)
-	if err != nil {
-		logrus.Errorln(err)
-		writer.WriteHeader(http.StatusInternalServerError)
-		return
-	}
-	writer.Write(b)
+	WriteJson(body, writer)
+
 }

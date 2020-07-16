@@ -80,6 +80,10 @@ func WriteJson(item interface{}, w http.ResponseWriter) {
 		return
 	}
 	w.Header().Add("content-type", "application/json")
-	w.Write(b)
+	_, err = w.Write(b)
+	if err != nil {
+		logrus.Errorln(err)
+		logrus.Errorln("could not write http response")
+	}
 
 }
