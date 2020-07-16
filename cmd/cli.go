@@ -49,7 +49,6 @@ func main() {
 			logrus.Errorln(err)
 			return
 		}
-		//TODO: loading bar
 
 		io.LoadingBar(2000)
 
