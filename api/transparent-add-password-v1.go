@@ -1,44 +1,34 @@
 package api
 
 import (
-	"encoding/json"
 	"github.com/just1689/just-safe/controller"
+	"github.com/just1689/just-safe/model"
 	"github.com/sirupsen/logrus"
 	"net/http"
 )
 
 func addPasswordV1(writer http.ResponseWriter, request *http.Request) {
-	defer request.Body.Close()
-	stop, b, err := ReadBody(writer, request)
-	if stop {
+	item, err := model.RequestToItem(request)
+	if err != nil {
+		logrus.Errorln(err)
+		http.Error(writer, "could not read body to item", http.StatusBadRequest)
 		return
 	}
 
-	body := make(map[string]string)
-	if err = json.Unmarshal(b, &body); err != nil {
-		logrus.Errorln("could not unmarshal body")
-		writer.WriteHeader(http.StatusBadRequest)
-		return
-	}
-
-	site, foundSite := body["site"]
-	username, foundUsername := body["username"]
-	password, foundPassword := body["password"]
-	walletPassword, foundWalletPassword := body["walletPassword"]
-	if !foundPassword || !foundUsername || !foundSite || !foundWalletPassword {
+	if !item.IsValidAddPassword() {
 		logrus.Errorln("could not find field of [username, password, site, walletPassword] in body")
 		writer.WriteHeader(http.StatusBadRequest)
 		return
 	}
 
-	walletPasswordOK := controller.CheckPassword(walletPassword)
+	walletPasswordOK := controller.CheckPassword(item.WalletPassword)
 	if !walletPasswordOK {
 		logrus.Errorln("bad password")
 		writer.WriteHeader(http.StatusUnauthorized)
 		return
 	}
 
-	err = controller.AddPasswordV1(site, username, password)
+	err = controller.AddPasswordV1(item.Site, item.Username, item.Password)
 	if err != nil {
 		logrus.Errorln(err)
 		writer.WriteHeader(http.StatusInternalServerError)
