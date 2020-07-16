@@ -14,6 +14,13 @@ type Item struct {
 	WalletPassword string `json:"walletPassword,omitempty"`
 }
 
+func (i Item) IsAddWallet() bool {
+	if i.WalletPassword == "" {
+		return false
+	}
+	return true
+}
+
 func (i Item) IsValidAddPassword() bool {
 	if i.Site == "" {
 		return false

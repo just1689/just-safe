@@ -10,28 +10,32 @@ import (
 func getPasswordV1(writer http.ResponseWriter, request *http.Request) {
 	item, err := model.RequestToItem(request)
 	if err != nil {
-		logrus.Errorln(err)
-		http.Error(writer, "could not read body to item", http.StatusBadRequest)
+		msg := "could not read body"
+		logrus.Error(err)
+		http.Error(writer, msg, http.StatusBadRequest)
 		return
 	}
 
 	if !item.IsValidGetPassword() {
-		logrus.Errorln("could not find field of [username, site, walletPassword] in body")
-		writer.WriteHeader(http.StatusBadRequest)
+		msg := "missing field among site, username, walletPassword"
+		logrus.Error(err)
+		http.Error(writer, msg, http.StatusBadRequest)
 		return
 	}
 
 	walletPasswordOK := controller.CheckPassword(item.WalletPassword)
 	if !walletPasswordOK {
-		logrus.Errorln("bad password")
-		writer.WriteHeader(http.StatusUnauthorized)
+		msg := "password was incorrect"
+		logrus.Error(err)
+		http.Error(writer, msg, http.StatusBadRequest)
 		return
 	}
 
 	result, err := controller.GetPasswordV1(item.Site, item.WalletPassword, item.Username)
 	if err != nil {
-		logrus.Errorln(err)
-		writer.WriteHeader(http.StatusInternalServerError)
+		msg := "could not get password"
+		logrus.Error(err)
+		http.Error(writer, msg, http.StatusInternalServerError)
 		return
 	}
 	WriteJson(model.Item{
