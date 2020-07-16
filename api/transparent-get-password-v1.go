@@ -23,21 +23,21 @@ func getPasswordV1(writer http.ResponseWriter, request *http.Request) {
 
 	site, foundSite := body["site"]
 	username, foundUsername := body["username"]
-	password, foundPassword := body["password"]
-	if !foundPassword || !foundUsername || !foundSite {
+	walletPassword, foundWalletPassword := body["walletPassword"]
+	if !foundWalletPassword || !foundUsername || !foundSite {
 		logrus.Errorln("could not find field of [username, password, site] in body")
 		writer.WriteHeader(http.StatusBadRequest)
 		return
 	}
 
-	walletPasswordOK := controller.CheckPassword(password)
+	walletPasswordOK := controller.CheckPassword(walletPassword)
 	if !walletPasswordOK {
 		logrus.Errorln("bad password")
 		writer.WriteHeader(http.StatusUnauthorized)
 		return
 	}
 
-	result, err := controller.GetPasswordV1(site, password, username)
+	result, err := controller.GetPasswordV1(site, walletPassword, username)
 	if err != nil {
 		logrus.Errorln(err)
 		writer.WriteHeader(http.StatusInternalServerError)
