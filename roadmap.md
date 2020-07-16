@@ -32,6 +32,7 @@
 
 
 ### Phase 2
+- [ ] Config in files
 - [x] API - Encrypted endpoints /encrypted/api/...
 - [x] API - Encrypted - Generate private and public key for the server instance.
 - [x] API - Encrypted - Store private and public key
