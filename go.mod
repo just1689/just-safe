@@ -4,6 +4,7 @@ go 1.14
 
 require (
 	github.com/atotto/clipboard v0.1.2
+	github.com/cheggaaa/pb/v3 v3.0.4
 	github.com/graymeta/stow v0.2.6
 	github.com/micmonay/keybd_event v1.1.0
 	github.com/pkg/errors v0.8.1
