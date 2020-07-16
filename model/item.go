@@ -69,10 +69,14 @@ func RequestToItem(r *http.Request) (item Item, err error) {
 		logrus.Errorln("could not read body of http request")
 		return
 	}
+	item, err = BytesToItem(b)
+	return
+}
+
+func BytesToItem(b []byte) (item Item, err error) {
 	item = Item{}
 	if err = json.Unmarshal(b, &item); err != nil {
 		logrus.Errorln(err)
 	}
 	return
-
 }
