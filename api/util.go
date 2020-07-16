@@ -70,3 +70,16 @@ func DecryptBody(b []byte) (payload []byte, err error) {
 	return
 
 }
+
+func WriteJson(item interface{}, w http.ResponseWriter) {
+	b, err := json.Marshal(item)
+	if err != nil {
+		logrus.Errorln(err)
+		logrus.Errorln("could not marshal response")
+		http.Error(w, "could not marshal response", http.StatusInternalServerError)
+		return
+	}
+	w.Header().Add("content-type", "application/json")
+	w.Write(b)
+
+}
