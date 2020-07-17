@@ -100,9 +100,6 @@ func main() {
 		}
 
 		if os.Args[2] == "keyboard" || os.Args[2] == "k" {
-			if err != nil {
-				panic(err)
-			}
 			keyboard, err := io.GenerateKeyboardScript(pass)
 			if err != nil {
 				logrus.Errorln(err)
